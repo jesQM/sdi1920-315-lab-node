@@ -10,6 +10,12 @@ module.exports = function(app) {
         res.send(respuesta);
     });
 
+    app.post("/cancion", function (req, res) {
+        res.send("Canción agregada: " + req.body.nombre + "<br>"
+                + " genero: " + req.body.genero + "<br>"
+                + " precio: " + req.body.precio);
+    });
+
     app.get('/suma', function(req, res) {
         let respuesta = parseInt(req.query.num1) + parseInt(req.query.num2);
         res.send(String(respuesta));
