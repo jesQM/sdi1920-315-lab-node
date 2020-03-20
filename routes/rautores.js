@@ -62,6 +62,30 @@ module.exports = function(app, swig) {
         res.send( respuesta );
     });
 
+    app.get("/autores/filtrar/:rol", function(req, res){
+        let autores = [{
+            "nombre" : "Ludwig van Beethoven",
+            "grupo" : "Bonn",
+            "rol" : "batería",
+        }, {
+            "nombre" : "Shōji Meguro",
+            "grupo" : "Catherine",
+            "rol" : "guitarrista",
+        }, {
+            "nombre" : "Mark 'TDK' Knight",
+            "grupo" : "FlitKillsMoths",
+            "rol" : "guitarrista",
+        }];
+
+        autores = autores.filter( (autor) => autor.rol == req.params.rol )
+        let respuesta = swig.renderFile("views/autores.html", {
+            vendedor : "Autores",
+            autores : autores,
+        });
+
+        res.send( respuesta );
+    });
+
     app.get("/autores/*", function(req, res){
         res.redirect( "/autores" );
     });
