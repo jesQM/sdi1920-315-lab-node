@@ -23,7 +23,26 @@ module.exports = function(app, swig) {
     });
 
     app.get("/autores/agregar", function(req, res){
-        let respuesta = swig.renderFile("views/autores-agregar.html", {});
+        let options = [{
+            "value" : "cantante",
+            "text" : "cantante",
+        }, {
+            "value" : "bateria",
+            "text" : "batería",
+        }, {
+            "value" : "guitarrista",
+            "text" : "guitarrista",
+        }, {
+            "value" : "bajista",
+            "text" : "bajista",
+        }, {
+            "value" : "teclista",
+            "text" : "teclista",
+        }];
+
+        let respuesta = swig.renderFile("views/autores-agregar.html", {
+            options : options
+        });
         res.send( respuesta );
     });
 
