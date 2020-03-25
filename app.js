@@ -6,8 +6,11 @@ let swig = require('swig');
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 let gestorBD = require("./modules/gestorBD.js");
 gestorBD.init(app,mongo);
+let fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 app.use(express.static('public'));
 app.set('port', 8081);
