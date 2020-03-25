@@ -1,6 +1,18 @@
 let express = require("express");
 let app = express();
 
+
+let expressSession = require('express-session');
+app.use(expressSession({
+    secret: 'abcdefg',
+    resave: true,
+    saveUninitialized: true
+}));
+
+let crypto = require('crypto');
+app.set('clave','abcdefg');
+app.set('crypto',crypto);
+
 let mongo = require('mongodb');
 let swig = require('swig');
 let bodyParser = require('body-parser');
