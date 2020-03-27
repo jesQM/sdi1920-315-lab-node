@@ -44,6 +44,13 @@
 				<h4 class="media-heading">{{ comment.autor }}</h4>
 				{{ comment.texto }}
 			</div>
+			<form class="form-horizontal" method="get" action="/comentario/borrar/{{ comment._id.toString() }}">
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary">Borrar</button>
+					</div>
+				</div>
+			</form>
 		</div>
 		{% endfor %}
 	</div>
