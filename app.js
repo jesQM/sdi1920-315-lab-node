@@ -64,6 +64,7 @@ app.set('db','mongodb://admin:sdi_Iz9@tiendamusica-shard-00-00-xmbgc.mongodb.net
 
 require("./routes/rusuarios.js")(app, swig, gestorBD);
 require("./routes/rcanciones.js")(app, swig, gestorBD);
+require("./routes/rcomentarios.js")(app, swig, gestorBD);
 require("./routes/rautores.js")(app, swig);
 
 app.get('/promo*', function (req, res) {

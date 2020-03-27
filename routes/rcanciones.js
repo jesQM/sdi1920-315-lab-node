@@ -141,11 +141,23 @@ module.exports = function(app, swig, gestorBD) {
             if ( canciones == null ){
                 res.send(respuesta);
             } else {
-                let respuesta = swig.renderFile('views/bcancion.html',
-                    {
-                        cancion : canciones[0]
-                    });
-                res.send(respuesta);
+                gestorBD.listarComentarios({ "cancion_id" : gestorBD.mongo.ObjectID(req.params.id) }, function (comments){
+                    let respuesta = null;
+                    if (comments) {
+                        respuesta = swig.renderFile('views/bcancion.html',
+                            {
+                                cancion : canciones[0],
+                                comentarios : comments,
+                            });
+                    } else {
+                        respuesta = swig.renderFile('views/bcancion.html',
+                            {
+                                cancion : canciones[0],
+                                comentarios : new Array(),
+                            });
+                    }
+                    res.send(respuesta);
+                });
             }
         });
 
