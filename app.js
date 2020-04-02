@@ -94,6 +94,10 @@ app.get('/promo*', function (req, res) {
     res.send('Respuesta patrón promo* ');
 })
 
+app.get('/', function (req, res) {
+    res.redirect('/tienda');
+})
+
 app.listen(app.get('port'), function () {
     console.log("server online");
 });
