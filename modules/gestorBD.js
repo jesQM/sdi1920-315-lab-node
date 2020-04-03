@@ -59,7 +59,40 @@ module.exports = {
             }
         });
     },
-
+    isSongOwnedByUser : function(cancionId, usuario, callback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                let collection = db.collection('canciones');
+                let criterio = {"_id" : cancionId};
+                collection.find(criterio).toArray(function(err, canciones) {
+                    if (err) {
+                        callback(null);
+                    } else {
+                        if(canciones[0] != null && canciones[0].autor == usuario) {
+                            callback(true); // The user is the author of the song
+                        } else {
+                            let collection = db.collection('compras');
+                            let criterio = {
+                                cancionId : cancionId,
+                                usuario : usuario
+                            };
+                            collection.find(criterio).toArray(function(err, results) {
+                                if (err) {
+                                    callback(null);
+                                } else {
+                                    callback(results[0] != null);
+                                }
+                                db.close();
+                            });
+                        }
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
     insertarUsuario : function(usuario, funcionCallback) {
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {

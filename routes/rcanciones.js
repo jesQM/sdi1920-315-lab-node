@@ -151,11 +151,17 @@ module.exports = function(app, swig, gestorBD) {
             usuario : req.session.usuario,
             cancionId : cancionId
         }
-        gestorBD.insertarCompra(compra ,function(idCompra){
-            if ( idCompra == null ){
-                res.send(respuesta);
+        gestorBD.isSongOwnedByUser(cancionId, req.session.usuario, function(isOwned){
+            if (!isOwned){
+                gestorBD.insertarCompra(compra ,function(idCompra){
+                    if ( idCompra == null ){
+                        res.send(respuesta);
+                    } else {
+                        res.redirect("/compras");
+                    }
+                });
             } else {
-                res.redirect("/compras");
+                res.send("Already own the song");
             }
         });
     });
@@ -167,22 +173,27 @@ module.exports = function(app, swig, gestorBD) {
             if ( canciones == null ){
                 res.send(respuesta);
             } else {
-                gestorBD.listarComentarios({ "cancion_id" : gestorBD.mongo.ObjectID(req.params.id) }, function (comments){
-                    let respuesta = null;
-                    if (comments) {
-                        respuesta = swig.renderFile('views/bcancion.html',
-                            {
-                                cancion : canciones[0],
-                                comentarios : comments,
-                            });
-                    } else {
-                        respuesta = swig.renderFile('views/bcancion.html',
-                            {
-                                cancion : canciones[0],
-                                comentarios : new Array(),
-                            });
-                    }
-                    res.send(respuesta);
+                gestorBD.isSongOwnedByUser(gestorBD.mongo.ObjectID(req.params.id), req.session.usuario, function(isOwned){
+                    gestorBD.listarComentarios({ "cancion_id" : gestorBD.mongo.ObjectID(req.params.id) }, function (comments){
+                        let respuesta = null;
+                        console.log(isOwned);
+                        if (comments) {
+                            respuesta = swig.renderFile('views/bcancion.html',
+                                {
+                                    cancion : canciones[0],
+                                    comentarios : comments,
+                                    isOwned : isOwned,
+                                });
+                        } else {
+                            respuesta = swig.renderFile('views/bcancion.html',
+                                {
+                                    cancion : canciones[0],
+                                    comentarios : new Array(),
+                                    isOwned : isOwned,
+                                });
+                        }
+                        res.send(respuesta);
+                    });
                 });
             }
         });
