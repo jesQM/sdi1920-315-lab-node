@@ -161,7 +161,7 @@ module.exports = function(app, swig, gestorBD) {
                     }
                 });
             } else {
-                res.send("Already own the song");
+                res.send(swig.renderFile('views/error.html',{mensaje : "Ya eres el propietario de esta canción"}));
             }
         });
     });
