@@ -1,4 +1,7 @@
 <div id="widget-agregar" >
+    <ul id="errors" >
+    </ul>
+
     <div class="form-group">
         <label class="control-label col-sm-2" for="agregar-nombre">Nombre:</label>
         <div class="col-sm-10">
@@ -44,7 +47,12 @@
 
             },
             error : function (error){
-                $( "#contenedor-principal" ).load("widget-login.html");
+                document.getElementById("errors").classList.add("alert");
+                document.getElementById("errors").classList.add("alert-danger");
+                $( "#errors" ).empty();
+                error.responseJSON.error.forEach((err) => {
+                    $( "#errors" ).append( "<li>"+err+"</li>" );
+                });
             }
         });
     }
